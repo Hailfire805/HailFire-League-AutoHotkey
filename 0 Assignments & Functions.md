@@ -1,5 +1,12 @@
 # AutoHotkey Assignment, Functions & Conditions
 
+Notes: There are some functions which require configuring to your own usage:
+
+- Functions involving the usage of mouse clicks will only work if your display is in 19201080px with zoom scaling set to 100%.
+- The OP.GG lookup function requires you to add your player id and tagline to use the default search method.
+- The Riot API Key Regenerator requires you To Use Google Chrome to log in to the developer portal.
+- The Next Page Function requires you to specify the location of the next page button on the screen after pressing the "End" Key (The "Window: X, Y" Coordinates in the Window Spy Tool).
+
 ## HotKeys
 
 <pre>
