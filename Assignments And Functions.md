@@ -56,7 +56,7 @@ Hotkey Format:
 - C , Go To Challenges
   - League Client Active
 
-- L , Open Lolalytics Matchup Urls
+- L , Open Lolalytics Matchup data based on Champion, Patch, & Lane
   - Always Active
 
 #### "Win + "

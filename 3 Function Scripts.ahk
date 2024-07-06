@@ -225,32 +225,52 @@ Numpad0:: { ; Discord Mass Share Macro
 	}
 
 	!l:: { ; Fetch Champion Matchup Data By Lane
-		LoadMatchups(Champion, Lane, Section) { ; Open 10 Matchups based on champion given and lane
+		UrlRunner(Champion, Lane, matchups, patch) { ; Using Matchup Data Load Urls
+			counter := 1 ; Set counter for iterating through
+			loop matchups.Length { ; For each matchup in matchup group
+				if (matchups[counter] != Champion) { ; If Matchup is Not The Same as User Champion
+					switch patch { ; Ask User For Data Timeframe
+						case 7: ; 7 Days
+							Url := "https://lolalytics.com/lol/" Champion "/vs/" matchups[counter] "/build/?lane=" Lane "&vslane=" Lane "&patch=7"
+						case 14: ; 14 Days
+							Url := "https://lolalytics.com/lol/" Champion "/vs/" matchups[counter] "/build/?lane=" Lane "&vslane=" Lane "&patch=14"
+						case 30: ; 30 Days
+							Url := "https://lolalytics.com/lol/" Champion "/vs/" matchups[counter] "/build/?lane=" Lane "&vslane=" Lane "&patch=30"
+						default: ; This Patch
+							Url := "https://lolalytics.com/lol/" Champion "/vs/" matchups[counter] "/build/?lane=" Lane "&vslane=" Lane ""
+					}
+
+					Run(Url) ; Run URL
+				}
+				counter++ ; Increment Counter
+			}
+		}
+		LoadMatchups(Champion, Lane, Section, patch?) { ; Open 10 Matchups based on champion given and lane
 			switch Lane { ; Set Data Endpoint to Desired Lane
 				case "top": ; Filter to desired sub sections
 					switch Section {
-						case 1: ; 10 Most common Matchups
+						case 1: ; Top 10
 							data := TopLane1
-						case 2:
+						case 2: ; 11-20
 							data := TopLane2
-						case 3:
+						case 3: ; 21-30
 							data := TopLane3
-						case 4:
+						case 4: ; 31-40
 							data := TopLane4
-						case 5:
+						case 5: ; 41-50
 							data := TopLane5
-						case 6:
+						case 6: ; 51-60
 							data := TopLane6
-						case 7:
+						case 7: ; 61-70
 							data := TopLane7
-					}
-					counter := 1 ; Set Loop Counter to 1
-					loop data.Length { ; Loop Through sub section
-						if (data[counter] != Champion) { ; if Given Champion is not the current loop item
-							Url := "https://lolalytics.com/lol/" Champion "/vs/" data[counter] "/build/?lane=top&vslane=top" ; Set url to open to that champion matchup
-							Run(Url) ; Open Url
-						}
-						counter++ ; increment Loop Counter
+						default: ; All Combined
+							data := TopLane1
+							data.push(TopLane2*)
+							data.push(TopLane3*)
+							data.push(TopLane4*)
+							data.push(TopLane5*)
+							data.push(TopLane6*)
+							data.push(TopLane7*)
 					}
 				case "jungle": ; Filter to desired sub sections
 					switch Section {
@@ -264,14 +284,12 @@ Numpad0:: { ; Discord Mass Share Macro
 							data := Jungle4
 						case 5:
 							data := Jungle5
-					}
-					counter := 1
-					loop data.Length {
-						if (data[counter] != Champion) {
-							Url := "https://lolalytics.com/lol/" Champion "/vs/" data[counter] "/build/?lane=jungle&vslane=jungle"
-							Run(Url)
-						}
-						counter++
+						default:
+							data := Jungle1
+							data.push(Jungle2*)
+							data.push(Jungle3*)
+							data.push(Jungle4*)
+							data.push(Jungle5*)
 					}
 				case "middle": ; Filter to desired sub sections
 					switch Section {
@@ -287,14 +305,14 @@ Numpad0:: { ; Discord Mass Share Macro
 							data := MiddleLane5
 						case 6:
 							data := MiddleLane6
-					}
-					counter := 1
-					loop data.Length {
-						if (data[counter] != Champion) {
-							Url := "https://lolalytics.com/lol/" Champion "/vs/" data[counter] "/build/?lane=middle&vslane=middle"
-							Run(Url)
-						}
-						counter++
+						default:
+							data := MiddleLane1
+							data.push(MiddleLane2*)
+							data.push(MiddleLane3*)
+							data.push(MiddleLane4*)
+							data.push(MiddleLane5*)
+							data.push(MiddleLane6*)
+
 					}
 				case "bottom": ; Filter to desired sub sections
 					switch Section {
@@ -306,14 +324,11 @@ Numpad0:: { ; Discord Mass Share Macro
 							data := BottomLane3
 						case 4:
 							data := BottomLane4
-					}
-					counter := 1
-					loop data.Length {
-						if (data[counter] != Champion) {
-							Url := "https://lolalytics.com/lol/" Champion "/vs/" data[counter] "/build/?lane=bottom&vslane=bottom"
-							Run(Url)
-						}
-						counter++
+						default:
+							data := BottomLane1
+							data.push(BottomLane2*)
+							data.push(BottomLane3*)
+							data.push(BottomLane4*)
 					}
 				case "support": ; Filter to desired sub sections
 					switch Section {
@@ -327,295 +342,173 @@ Numpad0:: { ; Discord Mass Share Macro
 							data := SupportLane4
 						case 5:
 							data := SupportLane5
-					}
-					counter := 1
-					loop data.Length {
-						if (data[counter] != Champion) {
-							Url := "https://lolalytics.com/lol/" Champion "/vs/" data[counter] "/build/?lane=support&vslane=support"
-							Run(Url)
-						}
-						counter++
+						default:
+							data := SupportLane1
+							data.push(SupportLane2*)
+							data.push(SupportLane3*)
+							data.push(SupportLane4*)
+							data.push(SupportLane5*)
 					}
 			}
+			UrlRunner(Champion, Lane, data, patch?) ; Using Matchup Selection
 		}
 
 		{ ; Top Lane Champions
 			TopLane1 := [
-				"aatrox", "darius", "garen", "sett", "jax", "camille", "renekton", "volibear", "mordekaiser", "drmundo"
-			]
+				"aatrox", "darius", "garen", "sett", "jax", "camille", "renekton", "volibear", "mordekaiser", "drmundo"]
 			TopLane2 := [
-				"malphite", "nasus", "fiora", "ksante", "yone", "riven", "gragas", "irelia", "rumble", "gnar"
-			]
+				"malphite", "nasus", "fiora", "ksante", "yone", "riven", "gragas", "irelia", "rumble", "gnar"]
 			TopLane3 := [
-				"jayce", "kayle", "yorick", "tryndamere", "twistedfate", "shen", "illaoi", "gangplank", "gwen", "pantheon"
-			]
+				"jayce", "kayle", "yorick", "tryndamere", "twistedfate", "shen", "illaoi", "gangplank", "gwen", "pantheon"]
 			TopLane4 := [
-				"skarner", "teemo", "vladimir", "vayne", "sion", "kennen", "urgot", "quinn", "tahmkench", "akali"
-			]
+				"skarner", "teemo", "vladimir", "vayne", "sion", "kennen", "urgot", "quinn", "tahmkench", "akali"]
 			TopLane5 := [
-				"kled", "warwick", "zac", "chogath", "trundle", "olaf", "singed", "yasuo", "heimerdinger", "wukong"
-			]
+				"kled", "warwick", "zac", "chogath", "trundle", "olaf", "singed", "yasuo", "heimerdinger", "wukong"]
 			TopLane6 := [
-				"cassioepia", "smolder", "sylas", "udyr", "varus", "shyvana", "rengar", "naafiri", "rammus", "sejuani"
-			]
+				"cassiopeia", "smolder", "sylas", "udyr", "varus", "shyvana", "rengar", "naafiri", "rammus", "sejuani"]
 			TopLane7 := [
-				"akshan", "maokai", "lee sin", "briar", "viego", "zed", "karma", "tristana", "lucian", "swain"
-			]
+				"akshan", "maokai", "leesin", "briar", "viego", "zed", "karma", "tristana", "lucian", "swain"]
 		}
 		{ ; Jungle Champions
 			Jungle1 := [
-				"hecarim",
-				"brand",
-				"masteryi",
-				"jarvaniv",
-				"zyra",
-				"ekko",
-				"vi",
-				"zac",
-				"kindred"
-			]
+				"hecarim", "brand", "masteryi", "jarvaniv", "zyra", "ekko", "vi", "zac", "kindred"]
 			Jungle2 := [
-				"xinzhao",
-				"sejuani",
-				"karthus",
-				"amumu",
-				"taliyah",
-				"udyr",
-				"fiddlesticks",
-				"belveth",
-				"shyvana"
-			]
+				"xinzhao", "sejuani", "karthus", "amumu", "taliyah", "udyr", "fiddlesticks", "belveth", "shyvana"]
 			Jungle3 := [
-				"volibear",
-				"briar",
-				"gragas",
-				"warwick",
-				"rengar",
-				"evelynn",
-				"nunu",
-				"elise",
-				"sylas",
-				"talon"
-			]
+				"volibear", "briar", "gragas", "warwick", "rengar", "evelynn", "nunu", "elise", "sylas", "talon"]
 			Jungle4 := [
-				"reksai",
-				"rammus",
-				"ivern",
-				"jax",
-				"skarner",
-				"poppy",
-				"rumble",
-				"wukong",
-				"morgana",
-				"maokai"
-			]
+				"reksai", "rammus", "ivern", "jax", "skarner", "poppy", "rumble", "wukong", "morgana", "maokai"]
 			Jungle5 := [
-				"zed"
-				"gwen"
-				"pantheon",
-				"naafiri",
-				"mordekaiser",
-				"teemo",
-				"trundle",
-				"olaf",
-				"qiyana",
-				"yorick",
-				"twitch",
-				"drmundo"
-			]
+				"zed", "gwen", "pantheon", "naafiri", "mordekaiser", "teemo", "trundle", "olaf", "qiyana", "yorick", "twitch", "drmundo"]
 		}
-		{ ; Middle Lane Champions
+		{ ; MiddleLaneChampions
 			MiddleLane1 := [
-				"lux",
-				"syndra",
-				"akali",
-				"vex",
-				"orianna",
-				"xerath",
-				"viktor",
-				"lissandra",
-				"galio",
-				"malzahar"
-			]
+				"lux", "syndra", "akali", "vex", "orianna", "xerath", "viktor", "lissandra", "galio", "malzahar"]
 			MiddleLane2 := [
-				"twistedfate",
-				"aurelionsol",
-				"irelia",
-				"fizz",
-				"naafiri",
-				"veigar",
-				"talon",
-				"vladimir",
-				"brand",
-				"akshan"
-			]
+				"twistedfate", "aurelionsol", "irelia", "fizz", "naafiri", "veigar", "talon", "vladimir", "brand", "akshan"]
 			MiddleLane3 := [
-				"taliyah",
-				"diana",
-				"azir",
-				"zoe",
-				"ekko",
-				"cassiopeia",
-				"anivia",
-				"kassadin",
-				"qiyana",
-				"malphite"
-			]
+				"taliyah", "diana", "azir", "zoe", "ekko", "cassiopeia", "anivia", "kassadin", "qiyana", "malphite"]
 			MiddleLane4 := [
-				"lucian",
-				"velkoz",
-				"ryze",
-				"annie",
-				"ziggs",
-				"ezreal",
-				"jayce",
-				"pantheon",
-				"quinn",
-				"neeko"
-			]
+				"lucian", "velkoz", "ryze", "annie", "ziggs", "ezreal", "jayce", "pantheon", "quinn", "neeko"]
 			MiddleLane5 := [
-				"swain",
-				"gragas",
-				"garen",
-				"kayle",
-				"smolder",
-				"rumble",
-				"nasus",
-				"kennen",
-				"tryndamere",
-				"karma"
-			]
+				"swain", "gragas", "garen", "kayle", "smolder", "rumble", "nasus", "kennen", "tryndamere", "karma"]
 			MiddleLane6 := [
-				"renekton",
-				"heimerdinger",
-				"seraphine",
-				"chogath",
-				"varus",
-				"zac",
-				"sion",
-				"nunu",
-				"viego",
-				"sett"
-			]
+				"renekton", "heimerdinger", "seraphine", "chogath", "varus", "zac", "sion", "nunu", "viego", "sett"]
 		}
-		{ ; Bottom Lane Champions
+		{ ;BottomLaneChampions
 			BottomLane1 := [
-				"jinx",
-				"karthus",
-				"kaisa",
-				"twitch",
-				"draven",
-				"ezreal",
-				"brand",
-				"zeri",
-				"cassiopeia",
-				"jhin"
-			]
+				"jinx", "karthus", "kaisa", "twitch", "draven", "ezreal", "brand", "zeri", "cassiopeia", "jhin"]
 			BottomLane2 := [
-				"tristana",
-				"nilah",
-				"yasuo",
-				"seraphine",
-				"kogmaw",
-				"ashe",
-				"aurelionsol",
-				"swain",
-				"lux",
-				"lucian"
-			]
+				"tristana", "nilah", "yasuo", "seraphine", "kogmaw", "ashe", "aurelionsol", "swain", "lux", "lucian"]
 			BottomLane3 := [
-				"xayah",
-				"vayne",
-				"missfortune",
-				"hwei",
-				"caitlyn",
-				"veigar",
-				"heimerdinger",
-				"tahmkench",
-				"velkoz",
-				"samira"
-			]
+				"xayah", "vayne", "missfortune", "hwei", "caitlyn", "veigar", "heimerdinger", "tahmkench", "velkoz", "samira"]
 			BottomLane4 := [
-				"ziggs",
-				"sivir",
-				"kalista",
-				"varus",
-				"smolder",
-				"akshan",
-				"senna",
-				"aphelios",
-				"corki",
-				"chogath"
-			]
+				"ziggs", "sivir", "kalista", "varus", "smolder", "akshan", "senna", "aphelios", "corki", "chogath"]
 		}
-		{ ; Support Lane Champions
+		{ ;SupportLaneChampions
 			SupportLane1 := [
-				"alistar",
-				"yuumi",
-				"braum",
-				"rell",
-				"janna",
-				"rakan",
-				"senna",
-				"seraphine",
-				"soraka",
-				"zyra"
-			]
+				"alistar", "yuumi", "braum", "rell", "janna", "rakan", "senna", "seraphine", "soraka", "zyra"]
 			SupportLane2 := [
-				"xerath"
-				"morgana"
-				"bard"
-				"sona"
-				"brand"
-				"poppy"
-				"zilean"
-				"velkoz"
-				"maokai"
-				"ashe"
-			]
+				"xerath" "morgana" "bard" "sona" "brand" "poppy" "zilean" "velkoz" "maokai" "ashe"]
 			SupportLane3 := [
-				"hwei",
-				"pantheon",
-				"neeko",
-				"renataglasc",
-				"swain",
-				"shaco",
-				"taric",
-				"tahmkench",
-				"camille",
-				"leblanc"
-			]
+				"hwei", "pantheon", "neeko", "renataglasc", "swain", "shaco", "taric", "tahmkench", "camille", "leblanc"]
 			SupportLane4 := [
-				"zac",
-				"amumu",
-				"galio",
-				"sylas",
-				"shen",
-				"fiddlesticks",
-				"zoe",
-				"skarner",
-				"heimerdinger",
-				"rumble"
-			]
+				"zac", "amumu", "galio", "sylas", "shen", "fiddlesticks", "zoe", "skarner", "heimerdinger", "rumble"]
 			SupportLane5 := [
-				"teemo",
-				"annie",
-				"missfortune",
-				"twitch",
-				"veigar",
-				"malphite",
-				"gragas",
-				"anivia",
-				"twistedfate",
-				"sett"
-			]
+				"teemo", "annie", "missfortune", "twitch", "veigar", "malphite", "gragas", "anivia", "twistedfate", "sett"]
 		}
 
 		Main() { ; Main Function
-			Champion := StrLower(InputBox("Champion?").Value) ; Ask user for champion
-			Lane := StrLower(InputBox("Lane?").Value) ; Ask user for Lane
-			Section := Number(InputBox("Section To Show? Answer Using '1': 10 Most Common Matchups, '2': 11 to 20 Most Common Matchups...etc").value) ; Ask User to list what group they are looking for
-			LoadMatchups(Champion, Lane, Section) ; Load User request
+			Champion := StrLower(InputBox("Champion?", "Champion Selection", "w250 h150").Value) ; Ask user for champion
+			Lane := StrLower(InputBox("
+			(
+				Lane? enter as shown:
+				top, jungle, middle, bottom, support
+				)", "Lane Selection", "w250 h150").Value) ; Ask user for Lane
+			switch Lane { ; Ask user for section of that lane
+				Case "top":
+					Section := Inputbox("
+					(
+					Answer with Section Number: Example, 1 = Section 1
+					Section To Show? (Groups Of 10 In Order Of Most To Least Common)
+					Section 1: Aatrox, Darius, Garen, Sett, Jax, Camille, Renekton, Volibear, Mordekaiser, Dr Mundo
+					Section 2: Malphite, Nasus, Fiora, Ksante, Yone, Riven, Gragas, Irelia, Rumble, Gnar
+					Section 3: Jayce, Kayle, Yorick, Tryndamere, Twisted Fate, Shen, Illaoi, Gangplank, Gwen, Pantheon
+					Section 4: Skarner, Teemo, Vladimir, Vayne, Sion, Kennen, Urgot, Quinn, Tahm Kench, Akali
+					Section 5: Kled, Warwick, Zac, Cho'gath, Trundle, Olaf, Singed, Yasuo, Heimerdinger, Wukong
+					Section 6: Cassiopeia, Smolder, Sylas, Udyr, Varus, Shyvana, Rengar, Naafiri, Rammus, Sejuani
+					Section 7: Akshan, Maokai, Lee Sin, Briar, Viego, Zed, Karma, Tristana, Lucian, Swain
+					Leave Blank To Open All (Warning Long Load Time)
+
+					)", "Section Select", "w680 h300").Value
+				Case "jungle":
+					Section := Inputbox("
+					(
+					Answer with Section Number: Example, 1 = Section 1
+					Section To Show? (Groups Of 10 In Order Of Most To Least Common)
+					Section 1: Hecarim, Brand, Master Yi, Jarvan Iv, Zyra, Ekko, Vi, Zac, Kindred
+					Section 2: Xin Zhao, Sejuani, Karthus, Amumu, Taliyah, Udyr, Fiddlesticks, Bel'veth, Shyvana
+					Section 3: Volibear, Briar, Gragas, Warwick, Rengar, Evelynn, Nunu, Elise, Sylas, Talon
+					Section 4: Rek'sai, Rammus, Ivern, Jax, Skarner, Poppy, Rumble, Wukong, Morgana, Maokai
+					Section 5: Zed, Gwen, Pantheon, Naafiri, Mordekaiser, Teemo, Trundle, Olaf, Qiyana, Yorick, Twitch, Dr Mundo
+					Leave Blank To Open All (Warning Long Load Time)
+					)", "Section Select", "w680 h300").Value
+				Case "middle":
+					Section := Inputbox("
+					(
+					Answer with Section Number: Example, 1 = Section 1
+					Section To Show? (Groups Of 10 In Order Of Most To Least Common)
+					Section 1: Lux, Syndra, Akali, Vex, Orianna, Xerath, Viktor, Lissandra, Galio, Malzahar
+					Section 2: Twisted Fate, Aurelion Sol, Irelia, Fizz, Naafiri, Veigar, Talon, Vladimir, Brand, Akshan
+					Section 3: Taliyah, Diana, Azir, Zoe, Ekko, Cassiopeia, Anivia, Kassadin, Qiyana, Malphite
+					Section 4: Lucian, Vel'koz, Ryze, Annie, Ziggs, Ezreal, Jayce, Pantheon, Quinn, Neeko
+					Section 5: Swain, Gragas, Garen, Kayle, Smolder, Rumble, Nasus, Kennen, Tryndamere, Karma
+					Section 6: Renekton, Heimerdinger, Seraphine, Cho'gath, Varus, Zac, Sion, Nunu, Viego, Sett
+					Leave Blank To Open All (Warning Long Load Time)
+					)", "Section Select", "w680 h300").Value
+				Case "bottom":
+					Section := Inputbox("
+					(
+					Answer with Section Number: Example, 1 = Section 1
+					Section To Show? (Groups Of 10 In Order Of Most To Least Common)
+					Section 1: Jinx, Karthus, Kai'Sa, Twitch, Draven, Ezreal, Brand, Zeri, Cassiopeia, Jhin
+					Section 2: Tristana, Nilah, Yasuo, Seraphine, Kog'Maw, Ashe, Aurelion Sol, Swain, Lux, Lucian
+					Section 3: Xayah, Vayne, Miss Fortune, Hwei, Caitlyn, Veigar, Heimerdinger, Tahm Kench, Vel'Koz, Samira
+					Section 4: Ziggs, Sivir, Kalista, Varus, Smolder, Akshan, Senna, Aphelios, Corki, Cho'Gath
+					Leave Blank To Open All (Warning Long Load Time)
+					)", "Section Select", "w680 h300").Value
+				Case "support":
+					Section := Inputbox("
+					(
+					Answer with Section Number: Example, 1 = Section 1
+					Section To Show? (Groups Of 10 In Order Of Most To Least Common)
+					Section 1: Alistar, Yuumi, Braum, Rell, Janna, Rakan, Senna, Seraphine, Soraka, Zyra
+					Section 2: Xerath, Morgana, Bard, Sona, Brand, Poppy, Zilean, Vel'Koz, Maokai, Ashe
+					Section 3: Hwei, Pantheon, Neeko, Renata Glasc, Swain, Shaco, Taric, Tahm Kench, Camille, Leblanc
+					Section 4: Zac, Amumu, Galio, Sylas, Shen, Fiddlesticks, Zoe, Skarner, Heimerdinger, Rumble
+					Section 5: Teemo, Annie, Miss Fortune, Twitch, Veigar, Malphite, Gragas, Anivia, Twisted Fate, Sett
+					Leave Blank To Open All (Warning Long Load Time)
+					)", "Section Select", "w680 h300").Value
+			}
+			Patch := InputBox("
+			(
+				Data Range?
+				Blank = This Patch only
+				7 = Last 7 Days
+				14 = Last 14 Days
+				30 = Last 30 Days
+				)", "Data Range", "w250 h200").Value ; Ask User For Patch Range
+			WikiWin := "https://leagueoflegends.fandom.com/wiki/" StrTitle(Champion) "/LoL#Details" ; Open Champion Wiki Page
+			Run("chrome.exe --new-window " WikiWin) ; Open Url in new window
+			sleep(2000)
+			LoadMatchups(Champion, Lane, Section, Patch) ; Load User request
+			; Function to get the title of the active window
+			Sleep(5000)
+			Send("^2") ; Move to first matchup tab
+			WinMaximize("A") ; Maximize
+			Send("^0") ; Reset Zoom
+			Send("^-") ; Zoom out to view summoner spells
+			Send("^-")
 		}
 		Main() ; Run Function
 	}
