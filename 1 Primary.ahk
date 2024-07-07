@@ -1,5 +1,8 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
+#Include %A_ScriptDir%/2 Sandbox.ahk
+#Include %A_ScriptDir%/3 Function Scripts.ahk
+#Include %A_ScriptDir%/4 Hotstrings.ahk
 
 KeyHistory()
 
