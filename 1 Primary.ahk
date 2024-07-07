@@ -32,10 +32,10 @@ KeyHistory()
 {
 
 
-	^!p:: Pause  ; Press Ctrl+Alt+P to pause. Press it again to resume.
+	; ^!p:: Pause  ; Press Ctrl+Alt+P to pause. Press it again to resume.
 
 	#HotIf not WinActive("ahk_exe League of Legends.exe") and not WinActive('ahk_exe Code.exe')
-	^e:: Edit ; Opens Script To Edit
+	; ^e:: Edit ; Opens Script To Edit
 
 
 }

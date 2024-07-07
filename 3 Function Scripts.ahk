@@ -12,13 +12,17 @@ NumLock, CapsLock, and ScrollLock: These keys may be forced to be "AlwaysOn" or 
 
 
 #HotIf WinActive("ahk_exe chrome.exe") or WinActive("ahk_exe spotify.exe") and not WinActive("ahk_exe League of Legends.exe") ; Chrome & Spotify Functions. Do Not use when in game
+
+/*
 !n:: { ; Next Page Tool, Replace CheckWindowX, CheckWindowY for Different Websites
 	CoordMode("Mouse", "Window")
 	Send("{End}") ; Navigate to the bottom of the page
 	Sleep(1000)
 	MouseClick("Left", 1130, 658, 1) ; Input Click On Next Page Button
 }
+*/
 
+/*
 !XButton1:: { ; Audio Sampler and Stopper
 	MouseStartX := 0
 	MouseStartY := 0
@@ -43,9 +47,11 @@ NumLock, CapsLock, and ScrollLock: These keys may be forced to be "AlwaysOn" or 
 
 	MouseClick("Left", MouseStartX, MouseStartY, 1) ; Click starting location to pause audio
 }
+*/
 
 #HotIf WinActive("ahk_exe Discord.exe") ; Discord Functions
 
+/*
 Numpad0:: { ; Discord Mass Share Macro
 	RepeatCount := InputBox("Times to repeat?") ; Prompts UserId for number of times to repeat
 	if RepeatCount.Result = "Cancel"
@@ -79,7 +85,7 @@ Numpad0:: { ; Discord Mass Share Macro
 		}
 	}
 }
-
+*/
 
 #HotIf WinActive("ahk_exe LeagueClientUx.exe") ; League Client Functions
 {
@@ -113,55 +119,6 @@ Numpad0:: { ; Discord Mass Share Macro
 ; General Functions
 {
 	#HotIf ; Always On Functions
-
-	^l:: { ; Transfer Tab Url to Notepad stage 1
-		WinActivate("ahk_exe chrome.exe") ; First in Chrome
-		sleep(100)
-		CurrentChromeTitle := WinGetTitle("A")
-		CoordMode("Mouse", "Window") ; Using location based on the window
-		Send("+{Click 1674 28 Left}") ; Shift click to select tabs to transfer
-		Sleep(100)
-		Send("{F6 2 }") ; Move focus to selected tabs
-		Sleep(100)
-		Send("{AppsKey}") ; Open Context Menu
-		Sleep(100)
-		Send("{Down 4}") ; Transfer tabs to new window
-		Sleep(100)
-		Send("{Right 2}")
-		Sleep(100)
-		Send("{Enter}")
-		Sleep(100)
-		Run Format('notepad.exe "{1}\Url Bundle.txt"', A_WorkingDir) ; Create and open a file to store the urls.
-		CurrentNotepadTitle := WinGetTitle("A")
-		Sleep(100)
-		WinActivate(CurrentChromeTitle)
-		Sleep(100)
-		Send("{Enter}")
-		Sleep(100)
-		WinActivate(CurrentNotepadTitle)
-		Sleep(100)
-		Send("^1")
-		Sleep(100)
-	}
-
-	^+l:: { ; Transfer Tab Urls to Notepad Stage 2
-		Loop 10 {
-			Sleep(100)
-			Send("{F6}")
-			Sleep(100)
-			Send("^c")
-			Sleep(100)
-			WinActivate("ahk_class Notepad")
-			Sleep(100)
-			Send("^v")
-			Sleep(100)
-			Send("`n")
-			WinActivate("ahk_exe chrome.exe")
-			Sleep(100)
-			Send("^w")
-			Sleep(100)
-		}
-	}
 
 	^o:: { ; Opens the OP.GG of Desired Player and closes Adblock Notification
 
@@ -209,6 +166,7 @@ Numpad0:: { ; Discord Mass Share Macro
 		}
 	}
 
+	/*
 	!t:: { ; Automatically Start Discord ScreenShare
 		CoordMode("Mouse", "Screen")
 		WinActivate("ahk_exe Discord.exe") ; Activate Discord
@@ -223,6 +181,7 @@ Numpad0:: { ; Discord Mass Share Macro
 		Sleep(333)
 		Send("{Click 1147 826 Left}") ; Left Click Begin Streaming
 	}
+	*/
 
 	!l:: { ; Fetch Champion Matchup Data By Lane
 		UrlRunner(Champion, Lane, matchups, patch) { ; Using Matchup Data Load Urls
@@ -515,10 +474,3 @@ Numpad0:: { ; Discord Mass Share Macro
 }
 
 ; Shortcut Functions
-{
-	^u:: {
-		Run "https://www.chess.com/play/online/new"
-		Sleep(2500)
-		Send("{Click 1351 284 Left}")
-	}
-}

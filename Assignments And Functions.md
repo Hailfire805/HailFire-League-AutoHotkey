@@ -18,36 +18,27 @@ Hotkey Format:
 
 ### No Modifier
 
-- Numpad0 , Discord Mass Share
+- Numpad0 , Discord Mass Share, DISABLED
   - Discord Active
 
 ### Single Modifier
 
 #### "Ctrl + "
 
-- L , Transfer Tab Url To Notepad Stage 1
-  - Always Active
-
 - O , Open OP.gg and close Adblock
   - Always Active
 
-- R , Reload Primary
+- R , Reload Primary, DISABLED
   - Not Active League In Game
 
-- E , Edit Primary
+- E , Edit Primary, DISABLED
   - Not Active League In Game AND Not Active VSCode
-
-- U , Start Chess Game
-  - Always Active
 
 #### "Shift + "
 
 #### "Alt + "
 
-- N , Next Page Tool
-  - Chrome Active OR Spotify Active, AND Not Active League In Game
-
-- Mouse Button4 , Audio Sampler
+- Mouse Button4 , Audio Sampler, DISABLED
   - Chrome Active OR Spotify Active, AND Not Active League In Game
 
 - M , Go To Match History
@@ -65,13 +56,10 @@ Hotkey Format:
 
 #### "Ctrl + Alt + "
 
-- P , Pause Scripts
+- P , Pause Scripts, DISABLED
   - Always Active
 
 #### "Ctrl + Shift + "
-
-- L , Transfer Tab Url To Notepad Stage 2
-  - Always Active
 
 ## Hot Strings
 
