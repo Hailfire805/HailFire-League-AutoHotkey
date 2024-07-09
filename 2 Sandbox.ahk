@@ -1,4 +1,12 @@
 #Requires AutoHotkey v2
 #SingleInstance
 
-KeyHistory()
+; KeyHistory()
+
+\:: {
+	Send("{Right}")
+	Send(",")
+	Send("{Enter}")
+	Send('""')
+	Send("{Left}")
+}

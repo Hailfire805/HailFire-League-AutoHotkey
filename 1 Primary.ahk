@@ -4,7 +4,7 @@
 #Include %A_ScriptDir%/3 Function Scripts.ahk
 #Include %A_ScriptDir%/4 Hotstrings.ahk
 
-KeyHistory()
+; KeyHistory()
 
 #HotIf not WinActive("ahk_exe League of Legends.exe") ; Do Not Reload When In Game
 ^r:: Reload

@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
 
-KeyHistory()
+; KeyHistory()
 
 /* SYNTAX GUIDE
 Ctrl = ^, Alt = !, Shift = +, Win = #
