@@ -1,18 +1,16 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
-#Include %A_ScriptDir%/2 Sandbox.ahk
 #Include %A_ScriptDir%/3 Function Scripts.ahk
 #Include %A_ScriptDir%/4 Hotstrings.ahk
 
 ; KeyHistory()
 
 #HotIf not WinActive("ahk_exe League of Legends.exe") ; Do Not Reload When In Game
-^r:: Reload
+; ^r:: Reload
 #HotIf
 
 ; Subscripts startup
 {
-	Run "2 Sandbox.ahk"
 	Run "3 Function Scripts.ahk"
 	Run "4 Hotstrings.ahk"
 }

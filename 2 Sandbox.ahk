@@ -3,10 +3,10 @@
 
 ; KeyHistory()
 
-\:: {
-	Send("{Right}")
-	Send(",")
-	Send("{Enter}")
-	Send('""')
-	Send("{Left}")
-}
+;\:: {
+;	Send("{Right}")
+;	Send(",")
+;	Send("{Enter}")
+;	Send('""')
+;	Send("{Left}")
+;}

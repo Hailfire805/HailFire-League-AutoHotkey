@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
 
-KeyHistory()
+; KeyHistory()
 ; SYNTAX GUIDE
 {
 	/*
@@ -10,10 +10,6 @@ KeyHistory()
 	Each numpad key can be made to launch two different hotkey subroutines depending on the state of NumLock. Alternatively, a numpad key can be made to launch the same subroutine regardless of the state.
 	NumLock, CapsLock, and ScrollLock: These keys may be forced to be "AlwaysOn" or "AlwaysOff". For example: SetNumLockState "AlwaysOn".
 	*/
-}
-; Text Inserts
-{
-	:O:datacomp::1_FOR_CHAMPION_VS_GENERAL_MATCHUP: 2_HIGHEST_PICK_RATE is Common, 3_HIGHEST_WIN_RATE is Highest, Diff of 4_WIN_RATE, P Diff of 5_PICK_RATE (6_PICK_RATE_OF_HIGHEST) ; Champion Stat Data Template
 }
 ; Hot Functions
 {
