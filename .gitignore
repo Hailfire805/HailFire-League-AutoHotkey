@@ -3,3 +3,9 @@ Assignments And Functions Private.md
 3.5 Function Scripts Private.ahk
 4.5 Hotstrings Private.ahk
 2 Sandbox.ahk
+
+# Ignore Python virtual environment
+.venv
+# Ignore contents of data directory but keep directory
+data/*
+!data/
