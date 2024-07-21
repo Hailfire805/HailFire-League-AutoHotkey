@@ -19,7 +19,7 @@
 
 import os
 
-# requests-html and a dependency of it (pyppeteer) are no longer maintained, 
+# requests-html and a dependency of it (pyppeteer) are no longer maintained,
 # so need to update env var to fix common issue
 
 # Get latest revision number @ https://chromium.woolyss.com/download/en/#windows
@@ -121,7 +121,7 @@ class WebDriverManager:
         options.set_capability('goog:loggingPrefs', {"performance": "ALL", "browser": "ALL"})
 
         service = ChromeService(ChromeDriverManager(cache_manager=DriverCacheManager(valid_range=1)).install())
-        
+
         driver = webdriver.Chrome(service=service, options=options)
         return driver
 
@@ -129,7 +129,7 @@ class WebDriverManager:
 # In[ ]:
 
 
-target_url = "lol-web-api.op.gg/api/v1.0/internal/bypass/games/na/summoners"
+target_url = "lol-web-api.op.gg/api/v1.0/internal/bypass/games/summoners/na"
 op_gg_summoner_profile_url = "https://www.op.gg/summoners/na/Fire-2842"
 output_file = "data/output.csv"
 
@@ -142,9 +142,9 @@ with WebDriverManager() as driver:
     driver.get(op_gg_summoner_profile_url)
 
     # # Wait for the specific element to load if necessary, helps ensure page is fully loaded
-    # WebDriverWait(driver, 10).until(
-    #     EC.presence_of_element_located((By.ID, '__next'))
-    # )
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, '__next'))
+    )
 
     # Sleep 10 seconds
     time.sleep(10)
@@ -198,7 +198,3 @@ soup = BeautifulSoup(html_content, 'lxml')
 
 
 # In[ ]:
-
-
-
-
