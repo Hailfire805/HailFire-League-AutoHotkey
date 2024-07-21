@@ -1,3 +1,5 @@
 {
-	"git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.testing.pytestEnabled": true
 }
