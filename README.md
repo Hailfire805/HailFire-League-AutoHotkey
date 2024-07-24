@@ -15,7 +15,7 @@ Notes: There are some functions which require configuring to your own usage:
 
 - Python version 3.9.13 or later.
 - Must install dependencies using <code>pip install -r requirements.txt</code>.
-
+- Be sure to go to task manager after running to check for if there are chrome processes running in the background and end the task or they will stack up and eat a ton of cpu
 ---
 
 ### Pulling & Cleaning OPGG Data
