@@ -1,7 +1,6 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
 
-; KeyHistory()
 ; SYNTAX GUIDE
 {
 	/*
@@ -198,53 +197,4 @@
 		Send("{Click 664 826 Left}") ; Find Match
 	}
 
-	::playtft:: {
-		Config() {
-			SetDefaultMouseSpeed(0)
-			SetMouseDelay(333)
-			Target := "ahk_exe LeagueClientUx.exe"
-			WinActivate(Target) ;
-			WinWaitActive(Target) ;
-			CoordMode("Mouse", "Window") ;
-		}
-		Navigate() {
-			EnterQueueSelect()
-			SetDefaultMouseSpeed(1)
-			Send("{Click 797 290 Left}") ; TFT
-			Sleep(100)
-			Send("{Click 800 290 Left}") ; TFT
-			Send("{Click 718 718 Left}") ; Ranked TFT
-			Send("{Click 686 854 Left}") ; Confirm
-		}
-
-		Config()
-		Navigate()
-		Sleep(1000)
-		Send("{Click 664 826 Left}") ; Find Match
-	}
-
-	::playarena:: {
-		Config() {
-			SetDefaultMouseSpeed(0)
-			SetMouseDelay(333)
-			Target := "ahk_exe LeagueClientUx.exe"
-			WinActivate(Target) ;
-			WinWaitActive(Target) ;
-			CoordMode("Mouse", "Window") ;
-		}
-		Navigate() {
-			EnterQueueSelect()
-			SetDefaultMouseSpeed(1)
-			Send("{Click 1109 304 Left}") ; Arena
-			Sleep(100)
-			Send("{Click 1111 304 Left}") ; Arena
-
-			Send("{Click 686 854 Left}") ; Confirm
-		}
-
-		Config()
-		Navigate()
-		Sleep(1000)
-		Send("{Click 664 826 Left}") ; Find Match
-	}
 }
