@@ -1,8 +1,6 @@
 #Requires AutoHotkey v2.0
 #SingleInstance ;forces script to only run one instance
 
-KeyHistory()
-
 /* SYNTAX GUIDE
 Ctrl = ^, Alt = !, Shift = +, Win = #
 Multiple hotkeys can be stacked vertically to have them perform the same action.
@@ -10,82 +8,6 @@ Each numpad key can be made to launch two different hotkey subroutines depending
 NumLock, CapsLock, and ScrollLock: These keys may be forced to be "AlwaysOn" or "AlwaysOff". For example: SetNumLockState "AlwaysOn".
 */
 
-
-#HotIf WinActive("ahk_exe chrome.exe") or WinActive("ahk_exe spotify.exe") and not WinActive("ahk_exe League of Legends.exe") ; Chrome & Spotify Functions. Do Not use when in game
-
-/*
-!n:: { ; Next Page Tool, Replace CheckWindowX, CheckWindowY for Different Websites
-	CoordMode("Mouse", "Window")
-	Send("{End}") ; Navigate to the bottom of the page
-	Sleep(1000)
-	MouseClick("Left", 1130, 658, 1) ; Input Click On Next Page Button
-}
-*/
-
-/*
-!XButton1:: { ; Audio Sampler and Stopper
-	MouseStartX := 0
-	MouseStartY := 0
-	PlayAudioSample(location, time, MouseStartX, MouseStartY) {
-		Send("{Click {location} Left}") ; Spotify mid song location
-		MouseMove(MouseStartX, MouseStartY) ; Move back to starting position
-		Sleep(time) ; Wait 7 Seconds
-	}
-	CaptureMouseStartPosition() {
-		SetDefaultMouseSpeed 0 ; Set mouse to instant movement
-		CoordMode("Mouse", "Window") ; Switch to window based coordinates for usage on either monitor
-		MouseGetPos &MouseStartX, &MouseStartY ; Capture starting position
-		MouseClick("Left") ; Left click from starting position
-		Sleep(300) ; Delay 0.3 seconds
-	}
-
-	CaptureMouseStartPosition()
-	if WinActive("ahk_exe Spotify.exe") ; If active window is spotify
-		PlayAudioSample("960 1021", 7000, MouseStartX, MouseStartY)
-	else ; If Window is not spotify
-		PlayAudioSample("1070 1001", 3000, MouseStartX, MouseStartY)
-
-	MouseClick("Left", MouseStartX, MouseStartY, 1) ; Click starting location to pause audio
-}
-*/
-
-#HotIf WinActive("ahk_exe Discord.exe") ; Discord Functions
-
-/*
-Numpad0:: { ; Discord Mass Share Macro
-	RepeatCount := InputBox("Times to repeat?") ; Prompts UserId for number of times to repeat
-	if RepeatCount.Result = "Cancel"
-		return
-	else {
-		CurrentCounter := Integer(RepeatCount.Value)
-		Recipients := CurrentCounter
-		WinActivate("ahk_exe Discord.exe")
-		Sleep(1000)
-		Send "{Up}" ; Edits text of last message sent
-		Sleep(1000)
-		Send "^a" ; Selects all text
-		Sleep(1000)
-		Send "^c" ; Copies text
-		Sleep(1000)
-
-		while (CurrentCounter > 0) { ; Loops based on userId input for repeats
-			loop Recipients {
-				Send "!{Down}"
-				Sleep(100)
-			} ; Moves to next recipent or channel in list
-			Sleep(1000)
-			Send("^a") ; Selects all existing text
-			Sleep(1000)
-			Send "^v" ; Pastes in copied text
-			Sleep(1000)
-			Send "{Enter}" ; Sends message
-			Sleep(1000)
-
-			CurrentCounter := CurrentCounter - 1 ; Decrements repeat CurrentCounter
-		}
-	}
-}
-*/
 
 #HotIf WinActive("ahk_exe LeagueClientUx.exe") ; League Client Functions
 {
@@ -114,13 +36,14 @@ Numpad0:: { ; Discord Mass Share Macro
 	}
 
 }
-#HotIf ; Always On Functions
 
-RiotId := EnvGet("Summoner_Name") ; Default SummonerName
-TagLine := EnvGet("Tagline") ; Default TagLine
-; General Functions
+#HotIf not WinActive("ahk_exe League of Legends.exe") ; Do Not use while in game
+
 
 ^o:: { ; Opens the OP.GG of Desired Player and closes Adblock Notification
+	RiotId := EnvGet("Summoner_Name") ; Default SummonerName
+	TagLine := EnvGet("Tagline") ; Default TagLine
+	; General Functions
 	global RiotId
 	global TagLine
 
@@ -135,7 +58,6 @@ TagLine := EnvGet("Tagline") ; Default TagLine
 					"`nPlease Enter The Following: {Summoner Name}#{TagLine}"
 				)
 			)
-			MakeDefault := MsgBox("Set Player As Default?", "Set Default?", "YNC")
 			DoesUserIdIncludeTag := RegExMatch(UserId.Value, "#") ; Check if provided userId includes a tagline
 			if (DoesUserIdIncludeTag = 0) { ; If no TagLine line is provided use default "NA1"
 				RiotId := UserId.Value
@@ -145,10 +67,6 @@ TagLine := EnvGet("Tagline") ; Default TagLine
 				SplitCombinedUserId := StrSplit(UserId.Value, "#")
 				RiotId := SplitCombinedUserId.Get(1)
 				TagLine := SplitCombinedUserId.Get(2)
-			}
-			if MakeDefault = "Yes" {
-				EnvSet("Summoner_Name", RiotId)
-				EnvSet("TagLine", TagLine)
 			}
 			target := "https://www.op.gg/summoners/na/" RiotId "-" TagLine ; Set Url to search
 
@@ -160,11 +78,9 @@ TagLine := EnvGet("Tagline") ; Default TagLine
 	}
 	else if RiotId != "" {
 		try {
-			displayData := "`nCurrent Default Player: " RiotId
 			UserId := InputBox(
 				(
 					"Player To Lookup?"
-					displayData
 				)
 			) ; Prompts for OP.GG userId to search
 			if UserId.Result = "Cancel" ; Check for cancel command
@@ -207,23 +123,6 @@ TagLine := EnvGet("Tagline") ; Default TagLine
 		MouseClick("Left", -680, 446, 1) ; Close Adblock notification
 	}
 }
-
-/*
-!t:: { ; Automatically Start Discord ScreenShare
-	CoordMode("Mouse", "Screen")
-	WinActivate("ahk_exe Discord.exe") ; Activate Discord
-	WinWaitActive("ahk_exe Discord.exe") ; Wait for Discord to be Active
-	Sleep(333)
-	CoordMode("Mouse", "Window") ; Set Coord Mode to use Window Relative values
-	Send("{Click 165 959 Left}") ; Left Click The Share Screen Button in the Lower Left
-	Sleep(333)
-	Send("{Click 862 407 Left}") ; Left Click The Tab For Screens
-	Sleep(333)
-	Send("{Click 850 490 Left}") ; Left Click Screen 1
-	Sleep(333)
-	Send("{Click 1147 826 Left}") ; Left Click Begin Streaming
-}
-*/
 
 !l:: { ; Fetch Champion Matchup Data By Lane
 	UrlRunner(Champion, Lane, matchups, patch) { ; Using Matchup Data Load Urls
@@ -514,44 +413,77 @@ TagLine := EnvGet("Tagline") ; Default TagLine
 	Main() ; Run Function
 }
 
-!/:: { ; OP.gg Season Data Reader
-	SendMode "Input"
+!o:: { ; OP.gg Season Data Reader
+	season := InputBox("
+	(
+	Season To Pull?
+	Season: 2024 S2: 1
+	Season: 2024 S1: 2
+	Season: 2023 S2: 3
+	Season: 2023 S1: 4
+	Season: 2022: 5
+	Season: 2021: 6
+	Season: 2020: 7
+	Season: 9: 8
+	Season: 8: 9
+	Season: 7: 10
+	Season: 6: 11
+	Season: 5: 12
+	Season: 4: 13
+	Season: 3: 14
+	Season: 2: 15
+	Season: 1: 16
+	)", "Season To Pull", "w200 h400").Value
 
-	; File path
-	filePath := "./data.txt"
+	summoner := InputBox("Summoner? ", "Summoner To Pull", "w100 h100").Value
+	tag := InputBox("Tag? ", "Summoner Tag", "w100 h100").Value
 
-
-	; Initialize sum variable
-	totalWins := 0
-	totalLosses := 0
-	global filePath
-	; Read file line by line
-	fileContent := FileRead(filePath,)
-
-	for line in StrSplit(fileContent, ["`n", "`r"])
-	{
-		; Use regex to find numbers followed by a standalone "w"
-		for item in StrSplit(line, A_Space)
-		{
-			if RegExMatch(item, "(\d+)W", &match)
-			{
-				totalWins += match[1]
-			}
-			if RegExMatch(item, "(\d+)L", &match)
-			{
-				totalLosses += match[1]
-			}
-
-		}
+	switch season {
+		case 1:
+			target_season := 27
+		case 2:
+			target_season := 25
+		case 3:
+			target_season := 23
+		case 4:
+			target_season := 21
+		case 5:
+			target_season := 19
+		case 6:
+			target_season := 17
+		case 7:
+			target_season := 15
+		case 8:
+			target_season := 13
+		case 9:
+			target_season := 11
+		case 10:
+			target_season := 7
+		case 11:
+			target_season := 6
+		case 12:
+			target_season := 5
+		case 13:
+			target_season := 4
+		case 14:
+			target_season := 3
+		case 15:
+			target_season := 2
+		case 16:
+			target_season := 1
+		default:
+			target_season := 27
 	}
 
-	; Display the total wins
-	MsgBox "Total wins: " totalWins "`n" "Total Losses: " totalLosses, "Player Win / Loss For Season"
-	Return
+	; Pull player Stats
+	cmd := "cd /d " A_WorkingDir "\scripts && python opgg_scraper.py " summoner " " tag " " target_season
+	RunWait(A_ComSpec " /k " cmd, , "Min")
+	Send('!{F4}')
+	; Parse Stats
+	sleep(1000)
+
+	cmd := "cd /d " A_WorkingDir "\scripts && python parse_stats.py " summoner " " target_season
+	RunWait(A_ComSpec " /k " cmd, , "Min")
+	Send('!{F4}')
 
 }
-
-; Shortcut Functions
-
-
-run "https://www.op.gg/summoners/na/Fire-2842"

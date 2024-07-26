@@ -3,9 +3,11 @@ Assignments And Functions Private.md
 3.5 Function Scripts Private.ahk
 4.5 Hotstrings Private.ahk
 2 Sandbox.ahk
-
+5 Templates.ahk
+scripts/parse_champs.py
+private_src
 # Ignore Python virtual environment
 .venv
-# Ignore contents of data directory but keep directory
+# Ignore contents of data directory
 data/*
-!data/
+data/

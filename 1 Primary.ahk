@@ -3,12 +3,11 @@
 #Include %A_ScriptDir%/3 Function Scripts.ahk
 #Include %A_ScriptDir%/4 Hotstrings.ahk
 
-; KeyHistory()
 
 #HotIf not WinActive("ahk_exe League of Legends.exe") ; Do Not Reload When In Game
-; ^r:: Reload
-#HotIf
+^+r:: Reload
 
+#HotIf
 ; Subscripts startup
 {
 	Run "3 Function Scripts.ahk"
@@ -30,10 +29,10 @@
 {
 
 
-	; ^!p:: Pause  ; Press Ctrl+Alt+P to pause. Press it again to resume.
+	^+p:: Pause  ; Press Ctrl+Alt+P to pause. Press it again to resume.
 
 	#HotIf not WinActive("ahk_exe League of Legends.exe") and not WinActive('ahk_exe Code.exe')
-	; ^e:: Edit ; Opens Script To Edit
+	^+e:: Edit ; Opens Script To Edit
 
 
 }
