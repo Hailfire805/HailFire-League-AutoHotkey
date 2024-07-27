@@ -5,13 +5,17 @@
 
 
 #HotIf not WinActive("ahk_exe League of Legends.exe") ; Do Not Reload When In Game
+
 ^+r:: Reload
 
-#HotIf
-; Subscripts startup
+#HotIf ; Subscripts startup
+
 {
+
 	Run "3 Function Scripts.ahk"
+
 	Run "4 Hotstrings.ahk"
+
 }
 
 ; SYNTAX GUIDE
@@ -28,11 +32,10 @@
 ; AutoHotkey Control Hot Keys
 {
 
-
 	^+p:: Pause  ; Press Ctrl+Alt+P to pause. Press it again to resume.
 
 	#HotIf not WinActive("ahk_exe League of Legends.exe") and not WinActive('ahk_exe Code.exe')
-	^+e:: Edit ; Opens Script To Edit
 
+	^+e:: Edit ; Opens Script To Edit
 
 }

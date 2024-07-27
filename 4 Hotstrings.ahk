@@ -10,10 +10,14 @@
 	NumLock, CapsLock, and ScrollLock: These keys may be forced to be "AlwaysOn" or "AlwaysOff". For example: SetNumLockState "AlwaysOn".
 	*/
 }
-; Hot Functions
-{
+
+
+{ ; Hot Functions
+
 	#HotIf WinActive('ahk_exe chrome.exe') ; Chrome Hotstrings
+
 	{
+
 		::keyregen:: { ; Riot API Key Regenerator
 			Run "https://developer.riotgames.com/" ; Open the riot developer portal in chrome
 			WinWait("Riot Developer Portal - Google Chrome", , 5) ; Wait until the window is open
@@ -38,8 +42,10 @@
 			Send("^w") ; Close Page
 		}
 	}
-	#HotIf
+
 }
+
+#HotIf
 
 { ; League "play- " Functions
 	EnterQueueSelect() {
@@ -77,15 +83,15 @@
 			else if FirstSecond = "Second" {
 				Send("{Click 870 850 Left}") ; Secondary Role
 				switch Role {
-					case "Top":
+					case "Top" | "top":
 						Send("{Click 684 777 Left}") ; Top Lane
-					case "Jungle":
+					case "Jungle" | "jg":
 						Send("{Click 761 787 Left}") ; Jungle
-					case "Mid":
+					case "Mid" | "mid":
 						Send("{Click 823 782 Left}") ; Mid Lane
-					case "Bot":
+					case "Bot" | "bot":
 						Send("{Click 898 785 Left}") ; Bot Lane
-					case "Support":
+					case "Support" | "sup":
 						Send("{Click 963 785 Left}") ; Support
 				}
 			}
