@@ -1,50 +1,52 @@
 {
-	"Season: 2024 S2": {
-		"Number": 27
-	},
-	"Season: 2024 S1": {
-		"Number": 25
-	},
-	"Season: 2023 S2": {
-		"Number": 23
-	},
-	"Season: 2023 S1": {
-		"Number": 21
-	},
-	"Season: 2022": {
-		"Number": 19
-	},
-	"Season: 2021": {
-		"Number": 17
-	},
-	"Season: 2020": {
-		"Number": 15
-	},
-	"Season: 9": {
-		"Number": 13
-	},
-	"Season: 8": {
-		"Number": 11
-	},
-	"Season: 7": {
-		"Number": 7
-	},
-	"Season: 6": {
-		"Number": 6
-	},
-	"Season: 5": {
-		"Number": 5
-	},
-	"Season: 4": {
-		"Number": 4
-	},
-	"Season: 3": {
-		"Number": 3
-	},
-	"Season: 2": {
-		"Number": 2
-	},
-	"Season: 1": {
-		"Number": 1
+	"seasons": {
+		"Season: 2024 S2": {
+			"Number": 27
+		},
+		"Season: 2024 S1": {
+			"Number": 25
+		},
+		"Season: 2023 S2": {
+			"Number": 23
+		},
+		"Season: 2023 S1": {
+			"Number": 21
+		},
+		"Season: 2022": {
+			"Number": 19
+		},
+		"Season: 2021": {
+			"Number": 17
+		},
+		"Season: 2020": {
+			"Number": 15
+		},
+		"Season: 9": {
+			"Number": 13
+		},
+		"Season: 8": {
+			"Number": 11
+		},
+		"Season: 7": {
+			"Number": 7
+		},
+		"Season: 6": {
+			"Number": 6
+		},
+		"Season: 5": {
+			"Number": 5
+		},
+		"Season: 4": {
+			"Number": 4
+		},
+		"Season: 3": {
+			"Number": 3
+		},
+		"Season: 2": {
+			"Number": 2
+		},
+		"Season: 1": {
+			"Number": 1
+		}
 	}
 }

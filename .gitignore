@@ -6,6 +6,7 @@ Assignments And Functions Private.md
 5 Templates.ahk
 scripts/parse_champs.py
 private_src
+scripts/sandbox.py
 # Ignore Python virtual environment
 .venv
 # Ignore contents of data directory
