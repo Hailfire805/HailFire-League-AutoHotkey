@@ -32,7 +32,6 @@ class WebDriverManager:
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--disable-extensions")
-        options.add_argument("--remote-debugging-port=9222")
         options.add_argument("--disable-software-rasterizer")
         options.set_capability('goog:loggingPrefs', {
                                "performance": "ALL", "browser": "ALL"})
@@ -45,12 +44,12 @@ class WebDriverManager:
 
 
 # For testing, use a predefined summoner name
-summoner = "Fire"
-tagline = 2842
+summoner = sys.argv[1]
+tagline = sys.argv[2] if sys.argv.__len__() == 2 else "NA1"
 # Load the JSON data for seasons
 print("Loading Seasons")
 try:
-    with open('./src/seasons.json', 'r', encoding='utf-8') as file:
+    with open('../src/seasons.json', 'r', encoding='utf-8') as file:
         season_data = json.load(file)['seasons']
 except FileNotFoundError:
     print("Season data file not found.")
@@ -65,27 +64,14 @@ print("Creating Mapping")
 season_map = {value['Number']: key for key,
               value in season_data.items() if 'Number' in value}
 
-# Create a mapping of champion IDs to champion names
-champion_map = {str(value): key for key, value in champion_ids.items()}
-
-# Define the output JSON file path
-output_file_path = f'./data/{summoner}/{summoner}_Season_Stats.json'
-if os.path.exists(output_file_path):
-    try:
-        with open(output_file_path, 'r', encoding='utf-8') as file:
-            all_seasons_data = json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        all_seasons_data = {}
-else:
-    all_seasons_data = {}
-
 # Process each possible season
 for season_num, season_name in season_map.items():
     print(f"Processing season: {season_name}")
 
     try:
-        season = season_num
+        # Re-initialize WebDriver for each iteration
         op_gg_summoner_profile_url = f"https://www.op.gg/summoners/na/{summoner}-{tagline}/champions"
+
         with WebDriverManager() as driver:
             driver.get(op_gg_summoner_profile_url)
             sleep(10)
@@ -105,31 +91,34 @@ for season_num, season_name in season_map.items():
         df.loc[:, 'api_summoner_id'] = df['message.params.response.url'].str.extract(
             pattern)
 
-        assert df['api_summoner_id'].nunique() == 1
+        if df['api_summoner_id'].nunique() == 1:
+            summoner_id = df[df['api_summoner_id'].notna()].iloc[0, -1]
 
-        summoner_id = df[df['api_summoner_id'].notna()].iloc[0, -1]
+            directory_path = Path(f'../data/{summoner}')
+            directory_path.mkdir(parents=True, exist_ok=True)
 
-        directory_path = Path(f'./data/{summoner}')
-        directory_path.mkdir(parents=True, exist_ok=True)
+            output_file = f"./data/{summoner}/{summoner}_{season_num}_opgg.json"
+            base_url = "https://lol-web-api.op.gg/api/v1.0/internal/bypass/summoners/na/"
+            endpoint = f"/most-champions/rank?game_type=RANKED&season_id={season_num}"
+            full_url = f"{base_url}{summoner_id}{endpoint}"
 
-        output_file = f"./data/{summoner}/{summoner}_{season}_opgg.json"
-        base_url = "https://lol-web-api.op.gg/api/v1.0/internal/bypass/summoners/na/"
-        endpoint = f"/most-champions/rank?game_type=RANKED&season_id={season}"
-        full_url = f"{base_url}{summoner_id}{endpoint}"
+            with Session() as session:
+                response = session.get(full_url)
 
-        with Session() as session:
-            response = session.get(full_url)
-
-            if response.ok:
-                data = response.json()
-                with open(output_file, 'w') as f:
-                    f.write(json.dumps(data, indent=4))
-                print("Data saved to", output_file)
-                if 'driver' in locals() and driver:
-                    driver.quit()
-            else:
-                print(f"Failed to retrieve data: {response.status_code}")
-                continue
+                if response.ok:
+                    data = response.json()
+                    with open(output_file, 'w') as f:
+                        f.write(json.dumps(data, indent=4))
+                    print("Data saved to", output_file)
+                else:
+                    print(f"Failed to retrieve data: {response.status_code}")
+                    continue
+        else:
+            print("No unique summoner ID found.")
+            continue
 
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        if driver:
+            driver.quit()
