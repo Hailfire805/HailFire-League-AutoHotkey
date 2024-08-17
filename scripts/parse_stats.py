@@ -36,7 +36,6 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     print("Error decoding the season data JSON.")
     sys.exit(1)
-
 # Load the JSON data for champion IDs
 print("Loading Champion Data")
 try:
@@ -63,12 +62,12 @@ if os.path.exists(output_file_path):
         with open(output_file_path, 'r', encoding='utf-8') as file:
             all_seasons_data = json.load(file)
             all_seasons_data.clear()
-            all_seasons_data['total'] = {}
+            all_seasons_data['Total Stats'] = {}
     except (FileNotFoundError, json.JSONDecodeError):
         all_seasons_data = {}
 else:
     all_seasons_data = {
-        "total": {
+        "Total Stats": {
 
         }
     }
@@ -89,74 +88,11 @@ for season_num, season_name in season_map.items():
             # Ensure the structure and key presence
             if 'data' in champion_stats and 'season_id' in champion_stats['data']:
                 season_id = champion_stats['data']['season_id']
-                season_name = season_map.get(
-                    season_id, f"Season {season_id}")
-                print(f"Processing data for {season_name}")
             else:
                 continue
 
             # Initialize season_data for the current season
             season_data = {}
-            total_data_template = {
-                "Meta-Performance Stats": {
-                    "Games Played": int,
-                    "Total Wins": int,
-                    "Total Losses": int,
-                    "Winrate": float,
-                    "Average OP Score (O to 10)": float,
-                    "Ace/MVP Games": int,
-                    "Ace/MVP Rate": float,
-                    "Average Game Length": float
-                },
-                "Combat & Damage Stats": {
-                    "Takedowns & MultiKills": {
-                        "Average Kills": float,
-                        "Average Deaths": float,
-                        "Average Assists": float,
-                        "KDA": float,
-                        "Total Double Kills": int,
-                        "Double Kills Per Game": float,
-                        "Total Triple Kills": int,
-                        "Triple Kills Per Game": float,
-                        "Total Quadra Kills": int,
-                        "Quadra Kills Per Game": float,
-                        "Total Penta Kills": int,
-                        "Penta Kills Per Game": float,
-                    },
-                    "Per Game Average Including Versus Non-Champions": {
-                        "Total Damage Dealt": float,
-                        "Physical Damage Dealt": float,
-                        "Magic Damage Dealt": float,
-                        "True Damage Dealt": float,
-                        "Damage Taken": float,
-                        "Damage Healed": float,
-                        "Damage Mitigated": float,
-                    },
-                    "Per Game Average Versus Only Champions": {
-                        "Total Damage To Champions": float,
-                        "Physical Damage To Champions": float,
-                        "Magic Damage To Champions": float,
-                        "True Damage To Champions": float,
-                        "Crowd Control Score": float
-                    }
-                },
-                "Per Game Average Income & Objective Stats": {
-                    "Gold Earned": float,
-                    "Minion Kills": float,
-                    "Monster Kills": float,
-                    "Turret Kills": float,
-                    "Inhibitor Kills": float,
-                    "Total Damage To Turrets": float,
-                    "Total Damage To Objectives": float
-                },
-                "Per Game Average Vision Stats": {
-                    "Vision Score": float,
-                    "Control Wards Placed": float,
-                    "Wards Placed": float,
-                    "Wards Cleared": float,
-
-                }
-            }
             # Extract champion stats and format the output
             # If Season Is 2023 S1 Or Later Parse Advanced Data
             if season_id >= 23:
@@ -302,7 +238,7 @@ for season_num, season_name in season_map.items():
                     }
                     print(f"{champion_name}, {season_name} Processed")
                     # If champion is not yet in total data
-                    if all_seasons_data['total'].get(champion_name, "new") == "new":
+                    if all_seasons_data['Total Stats'].get(champion_name, "new") == "new":
                         current_champ = {
                             "Meta-Performance Stats": {
                                 "Games Played": games,
@@ -363,10 +299,10 @@ for season_num, season_name in season_map.items():
                             }
                         }
                         print(f"{champion_name} Created")
-                        all_seasons_data['total'][champion_name] = current_champ
+                        all_seasons_data['Total Stats'][champion_name] = current_champ
                     # If champion does exist in total data
                     else:
-                        current = all_seasons_data['total'][champion_name]
+                        current = all_seasons_data['Total Stats'][champion_name]
                         meta = current['Meta-Performance Stats']
                         takedowns = current["Combat & Damage Stats"]['Takedowns & MultiKills']
                         alldmg = current["Combat & Damage Stats"]["Per Game Average Including Versus Non-Champions"]
@@ -445,13 +381,13 @@ for season_num, season_name in season_map.items():
                         income["Total Damage To Objectives"] = round((oldgames * income["Total Damage To Objectives"] + (
                             avg_dmg_dealt_to_objectives * games)) / meta['Games Played'], 2)
                         vision["Vision Score"] = round((
-                            oldgames * income["Vision Score"] + (avg_vision_score * games)) / meta['Games Played'], 2)
+                            oldgames * vision["Vision Score"] + (avg_vision_score * games)) / meta['Games Played'], 2)
                         vision["Control Wards Placed"] = round((
-                            oldgames * income["Control Wards Placed"] + (avg_control_wards * games)) / meta['Games Played'], 2)
+                            oldgames * vision["Control Wards Placed"] + (avg_control_wards * games)) / meta['Games Played'], 2)
                         vision["Wards Placed"] = round((
-                            oldgames * income["Wards Placed"] + (avg_wards_placed * games)) / meta['Games Played'], 2)
+                            oldgames * vision["Wards Placed"] + (avg_wards_placed * games)) / meta['Games Played'], 2)
                         vision["Wards Cleared"] = round((
-                            oldgames * income["Wards Cleared"] + (avg_wards_cleared * games)) / meta['Games Played'], 2)
+                            oldgames * vision["Wards Cleared"] + (avg_wards_cleared * games)) / meta['Games Played'], 2)
 
                         print(f"{champion_name} Updated")
                         # If Earlier Than 2023 S1 Parse Basic Data
@@ -553,10 +489,13 @@ for season_num, season_name in season_map.items():
         continue
 
 
-total_champ_names = list(all_seasons_data['total'].keys())
+total_champ_names = list(all_seasons_data['Total Stats'].keys())
 for name in total_champ_names:
-    all_seasons_data['total'][name]['Meta-Performance Stats']['Average Game Length'] = f"{str(math.floor(all_seasons_data['total'][name]['Meta-Performance Stats']['Average Game Length'] / all_seasons_data['total'][name]['Meta-Performance Stats']['Games Played'] // 60))} Minutes {all_seasons_data['total'][name]['Meta-Performance Stats']['Average Game Length'] % 60} Seconds"
-
+    all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Average Game Length'] = f"{str(math.floor(all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Average Game Length'] / all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Games Played'] // 60))} Minutes {all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Average Game Length'] % 60} Seconds"
+    all_seasons_data['Total Stats'][name]['Meta-Performance Stats'][
+        'Ace/MVP Rate'] = f"{str(all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Ace/MVP Rate'])}%"
+    all_seasons_data['Total Stats'][name]['Meta-Performance Stats'][
+        'Winrate'] = f"{str(all_seasons_data['Total Stats'][name]['Meta-Performance Stats']['Winrate'])}%"
 with open(output_file_path, 'w', encoding='utf-8') as output_file:
     json.dump(all_seasons_data, output_file,
               indent=4, ensure_ascii=False)
